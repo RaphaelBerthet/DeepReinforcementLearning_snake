@@ -7,6 +7,13 @@ pyxel.init(111, 111, title='snake')
 
 PERIODE_ACTU = 0.2  # bouge le serpent toutes les ...
 
+Tracer_orientation_serpent = {
+    "gauche" : (0, 5, 6, 1),
+    "droite" : (5, 5, 6, 1),
+    "haut" : (5, 0, 1, 6),
+    "bas" : (5, 5, 1, 6)
+}
+
 class Serpent:
     def __init__(self):
         self.nx = 5
