@@ -3,7 +3,7 @@ import pyxel
 import time
 import copy
 
-pyxel.init(111, 111, title='snake')
+pyxel.init(121, 121, title='snake')
 
 PERIODE_ACTU = 0.2  # bouge le serpent toutes les ...
 
@@ -20,12 +20,6 @@ class Serpent:
         self.ny = 5
         self.direction = 2  # 1 : gauche; 2 : droite; 3 : haut; 4 : bas
         self.cases_occupe = [[5, 5], [4, 5], [3, 5]]  # le 1er correspond à la tête le 2e...
-
-    def tracer(self):
-        case = self.cases_occupe[0]
-        pyxel.rect(conversion_numerocase_coordonnees(case[0]), conversion_numerocase_coordonnees(case[1]), 10, 10, 2)
-        for case in self.cases_occupe[1:]:
-            pyxel.rect(conversion_numerocase_coordonnees(case[0]), conversion_numerocase_coordonnees(case[1]), 10, 10, 4)
 
     def actu_direction(self):
         tete = self.cases_occupe[0]
@@ -74,6 +68,23 @@ class Serpent:
         else:
             self.cases_occupe = [tete] + self.cases_occupe[:-1]
 
+    def tracer(self):
+        case = self.cases_occupe[0]
+        case2 = self.cases_occupe[-1]
+        pyxel.rect(conversion_numerocase_coordonnees(case[0]), conversion_numerocase_coordonnees(case[1]), 11, 11, 2)
+        pyxel.rect(conversion_numerocase_coordonnees(case2[0]), conversion_numerocase_coordonnees(case2[1]), 11, 11, 1)
+        for i in range(len(self.cases_occupe[1:-1])):
+            indice_reel = i + 1
+            x = conversion_numerocase_coordonnees(self.cases_occupe[indice_reel][0])
+            y = conversion_numerocase_coordonnees(self.cases_occupe[indice_reel][1])
+            pyxel.rect(x, y, 11, 11, 4)
+            direction_case_avant = trouve_direction(self.cases_occupe[indice_reel], self.cases_occupe[indice_reel - 1])
+            direction_case_apres = trouve_direction(self.cases_occupe[indice_reel], self.cases_occupe[indice_reel + 1])
+            for direction in [direction_case_avant, direction_case_apres]:
+                values = Tracer_orientation_serpent[direction]
+                dx, dy, L, l = values[0], values[1], values[2], values[3]
+                pyxel.rect(x + dx, y + dy, L, l, 3)
+
 class Pomme:
     def __init__(self, cases_occupe):
         cases_libres = [[i, j] for i in range(1, 11) for j in range(1, 11)]
@@ -87,22 +98,33 @@ class Pomme:
         pyxel.circ(conversion_numerocase_coordonnees(self.x) + 5, conversion_numerocase_coordonnees(self.y) + 5, 3, 8)
 
 def conversion_numerocase_coordonnees(x):
-    return 1 + 11 * (x - 1)
+    return 1 + 12 * (x - 1)
+
+def trouve_direction(origine, point):
+    '''renvoie la direction de point par rapport à origine (les 2 sont collés)'''
+    if [a + b for a, b in zip(origine, [1, 0])] == point:
+        return "droite"
+    elif [a + b for a, b in zip(origine, [-1, 0])] == point:
+        return "gauche"
+    elif [a + b for a, b in zip(origine, [0, 1])] == point:
+        return "bas"
+    elif [a + b for a, b in zip(origine, [0, -1])] == point:
+        return "haut"
+
 
 def draw():
     pyxel.cls(0)
     ## grille
-    pyxel.rect(0, 0, 111, 1, 11)
-    pyxel.rect(0, 0, 1, 111, 11)
-    pyxel.rect(110, 0, 1, 111, 11)
-    pyxel.rect(0, 110, 111, 1, 11)
+    pyxel.rect(0, 0, 121, 1, 11)
+    pyxel.rect(0, 0, 1, 121, 11)
+    pyxel.rect(120, 0, 1, 121, 11)
+    pyxel.rect(0, 120, 121, 1, 11)
     for i in range(1, 10):
-        pyxel.rect(i * 11, 1, 1, 109, 11)
-        pyxel.rect(1, i * 11, 109, 1, 11)
+        pyxel.rect(i * 12, 1, 1, 119, 11)
+        pyxel.rect(1, i * 12, 119, 1, 11)
 
     serpent.tracer()
     pomme.tracer()
-
 
 def update():
     global last_t
@@ -117,5 +139,6 @@ def update():
 serpent = Serpent()
 pomme = Pomme(serpent.cases_occupe)
 last_t = time.perf_counter()
+
 
 pyxel.run(update, draw)
