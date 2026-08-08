@@ -39,7 +39,7 @@ class Serpent:
         gauche = True
         haut = True
         bas = True
-        for case in self.cases_occupe[1:]:
+        for case in self.cases_occupe[1:-1]:
             if case[0] + 1 == tete[0] and case[1] == tete[1]:
                 gauche = False
             if case[0] - 1 == tete[0] and case[1] == tete[1]:
