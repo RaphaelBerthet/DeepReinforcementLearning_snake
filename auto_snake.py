@@ -7,7 +7,7 @@ from collections import deque
 
 pyxel.init(121, 121, title='snake')
 
-PERIODE_ACTU = 0.1  # bouge le serpent toutes les ...
+PERIODE_ACTU = 0.01  # bouge le serpent toutes les ...
 
 data = np.load("reseau_neurones.npz")
 W1 = data['W1']

@@ -4,7 +4,7 @@ import copy
 import os
 from collections import deque
 
-NB_PARTIES = 200
+NB_PARTIES = 2000
 NB_SAMPLES_MAX = 50000
 p_debut = 0.01
 p_fin = 0.01
@@ -33,9 +33,6 @@ cf
 sample = [state1, state2, action, reward, terminal_state] (61)
 '''
 
-print(os.getcwd())
-os.chdir("3_snake")
-print(os.getcwd())
 try:
     data = np.load('reseau_neurones.npz')
     W1 = data['W1']
